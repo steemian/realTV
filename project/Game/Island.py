@@ -1,5 +1,7 @@
 import copy
 from random import shuffle
+from collections import Counter
+
 
 from Game.Player import Player
 from Game.Context import Context, PlayerContext
@@ -11,6 +13,7 @@ class Island:
 
     def __init__(self, players, name, islandIndex, totalBots, totalHumans):
         shuffle(players)
+        print ("Creating island with {}".format(players))
         self.activePlayers = players
         self.eliminatedPlayers = []
         self.betrayers = []
@@ -23,10 +26,24 @@ class Island:
 
             context = None
 
+            print ("\n-- ROUND with {}/{}/{} players".format(
+                    len(self.activePlayers),
+                    len(self.eliminatedPlayers),
+                    len(self.betrayers)
+            ))
+            
+
             for p in self.activePlayers:
                 p.decide(context)
 
             self.registerBetrayers(filter(lambda p: p.decision == p, self.activePlayers))
+
+            print ("\nafter betray:  {}/{}/{} players".format(
+                    len(self.activePlayers),
+                    len(self.eliminatedPlayers),
+                    len(self.betrayers)
+            ))
+
 
             if (self.solveTrial() == False):
                 self.gameOver()
@@ -55,6 +72,7 @@ class Island:
 
     def registerBetrayers(self, players):
         for p in players: 
+            print ("  BETRAY {}".format(p.name))
             self.betrayers.append(p)
             self.activePlayers.remove(p)
 
@@ -66,10 +84,14 @@ class Island:
             p.score += Const.SCORE_FOR_TRAITOR
 
     def voteAndEliminate(self, players):
-        elimination = dict(players, 0)
+        elimination = Counter()
 
         for p in players:
+            print ("{} votes elimiation of {}".format(p.name, p.decision.name))
             elimination[p.decision] += 1
+
+        print (" ELIMINATION :\n  {}".format("\n  ".join(
+                "{:40} : {}".format(p.name, elimination[p.name]) for p in elimiation.items())))
 
         ties = []
         mostVotes = 0
