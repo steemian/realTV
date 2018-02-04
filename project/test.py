@@ -19,10 +19,15 @@ def eprint(*args, **kwargs):
 def smokeTest():
     print ("Smoke Test")
     players = [] 
-    for i in range(0,3):
-        players.append(SimpleExample("Bot {}".format(i), 100))
-    t = Island(players, "testIsland", 0, 0, 3)
-    t.playUntilLastMan(0)
+    for i in range(0,5):
+        #players.append(SimpleExample("Suicide {}".format(i), 100))
+        players.append(RandomPlayer( "Rand    {}".format(i), 100))
+
+    gameContext = GameContext(0, 0, 3)    
+    t = Island(players, "testIsland", 0, gameContext)
+    t.playUntilLastMan()
+
+    print (t.scoreBoard())
 
 
 smokeTest()
@@ -30,3 +35,9 @@ smokeTest()
 #tablesDispatch()
 #fullGame()
 #instantiateGame()
+
+
+
+print ("\n\n\n------------------------------------\n\n")
+
+

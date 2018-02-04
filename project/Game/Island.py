@@ -1,3 +1,4 @@
+
 import copy
 from random import shuffle
 from collections import Counter
@@ -11,47 +12,50 @@ from Game.Const import Const
 class Island:
     
 
-    def __init__(self, players, name, islandIndex, totalBots, totalHumans):
+    def __init__(self, players, name, islandIndex, gameContext):
         shuffle(players)
-        print ("Creating island with {}".format(players))
-        self.activePlayers = players
-        self.eliminatedPlayers = []
-        self.betrayers = []
+        #print ("Creating island with {}".format(players))
+        self.allPlayers = {}
+        self.eliminatedPlayers = {}
+        self.betrayers = {}
+        for p in players:
+            self.allPlayers[p.id] = p
+        self.activePlayers = self.allPlayers.copy()
+        self.islandIndex = islandIndex
         self.name = name
-        self.context = Context(players, islandIndex, totalBots, totalHumans)
+        self.context = Context(self, gameContext)
 
-    def playUntilLastMan(self, phaseIndex):
+
+    def playUntilLastMan(self):
 
         while (len(self.activePlayers) > 0):
 
-            context = None
-
-            print ("\n-- ROUND with {}/{}/{} players".format(
+            print ("\n\n-- ROUND with {}/{}/{} (total {}) players".format(
                     len(self.activePlayers),
                     len(self.eliminatedPlayers),
-                    len(self.betrayers)
-            ))
-            
-
-            for p in self.activePlayers:
-                p.decide(context)
-
-            self.registerBetrayers(filter(lambda p: p.decision == p, self.activePlayers))
-
-            print ("\nafter betray:  {}/{}/{} players".format(
-                    len(self.activePlayers),
-                    len(self.eliminatedPlayers),
-                    len(self.betrayers)
+                    len(self.betrayers),
+                    len(self.allPlayers)
             ))
 
+            self.context.update(self)
+
+
+
+            for p in self.activePlayers.values():
+                p.decide(self.context)
+
+            #print ("BEFORE BETRAY \n{}".format(self.context.describe()))
+            self.registerBetrayers(list(filter(lambda p: p.decision.id == p.id , self.activePlayers.values())))
+            #self.context.update(self)
+            #print ("AFTER BETRAY \n{}".format(self.context.describe()))
 
             if (self.solveTrial() == False):
                 self.gameOver()
             else:
-                for p in self.activePlayers:
+                for p in self.activePlayers.values():
                     p.score += Const.SCORE_FOR_TRIAL
 
-                self.voteAndEliminate(self.activePlayers)
+                self.voteAndEliminate(self.activePlayers.values())
 
                 if (len(self.activePlayers) == 1):
                     self.victory()
@@ -59,38 +63,47 @@ class Island:
 
     def solveTrial(self):
         difficulty = Const.DIFFICULTY_A * len(self.activePlayers) + Const.DIFFICULTY_B
-        commonStrength = sum(p.strength for p in self.activePlayers)
+        commonStrength = sum(p.strength for p in self.activePlayers.values())
 
         if (commonStrength > difficulty):
             return True
         else:
             return False
 
-    def eliminate(self, player):
-        self.activePlayers.remove(player)
-        self.eliminatedPlayers.append(player)
+
+    def eliminate(self, playerId):
+
+        p = self.allPlayers[playerId]
+        print ("   ELIMINATE {}".format(p.name))
+
+        if p in self.activePlayers.values():
+            del self.activePlayers[p.id]
+            self.eliminatedPlayers[p.id] = p
+
 
     def registerBetrayers(self, players):
         for p in players: 
-            print ("  BETRAY {}".format(p.name))
-            self.betrayers.append(p)
-            self.activePlayers.remove(p)
+            print ("  {} **betrays**".format(p.name))
+            self.betrayers[p.id] = p
+            del self.activePlayers[p.id]
+        
 
     def victory(self):
-        self.activePlayers[0].score += Const.SCORE_FOR_LASTMAN
+        key, victor = self.activePlayers.popitem()
+        victor.score += Const.SCORE_FOR_LASTMAN
 
     def gameOver(self):
-        for p in self.betrayers:
+        for p in self.betrayers.values():
             p.score += Const.SCORE_FOR_TRAITOR
 
     def voteAndEliminate(self, players):
         elimination = Counter()
 
         for p in players:
-            print ("{} votes elimination of {}".format(p.name, p.decision.name))
+            print ("  {} votes elimination of {}".format(p.name, p.decision.name))
             elimination[p.decision] += 1
 
-        print (" ELIMINATION :\n  {}".format("\n  ".join(
+        print ("   ELIMINATION SCOREBOARD :\n     {}".format("\n     ".join(
                 "{:40} : {}".format(p.name, score) for p,score in elimination.items())))
 
         ties = []
@@ -106,19 +119,28 @@ class Island:
                     if (votes > mostVotes):
                         ties = [player]
                         mostVotes = votes
+            #print("   * leader= {:2} {}".format(
+            #    mostVotes, 
+            #    "\n                ".join(p.name for p in ties)))
+
+
 
         if (len(ties) == 1):
-            self.eliminate(ties[0])
+            self.eliminate(ties[0].id)
         else:
             self.tieBreak(ties)
 
     def tieBreak(self, tiedPlayers):
 
-        context = None
-        elimination = dict(tiedPlayers, 0)
+        print ("-- TIE BREAK {}".format(
+            "\n             ".join(p.name for p in tiedPlayers)))
 
-        for p in players:
-            decision = p.voteForTies(context)
+        self.context.registerTies(tiedPlayers)
+
+        elimination = Counter()
+
+        for p in self.activePlayers.values():
+            decision = p.voteForTie(self.context)
             if (decision in tiedPlayers):
                 elimination[decision] += 1
 
@@ -138,4 +160,13 @@ class Island:
                         mostVotes = votes
 
         for bye in tiedAgain:
-            self.eliminate(bye)
+            self.eliminate(bye.id)
+
+
+    def scoreBoard(self):
+        displayBoard = "\n\n-------SCORE BOARD for Island #{}\n".format(self.islandIndex)
+        orderedPlayers = sorted(self.allPlayers.values(), key=lambda p: p.score, reverse=True)
+        
+        displayBoard += "\n".join(p.describe() for p in orderedPlayers)
+
+        return displayBoard
