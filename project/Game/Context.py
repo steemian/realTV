@@ -65,13 +65,16 @@ class Context:
         for p in island.eliminatedPlayers.values():
             self.eliminatedPlayers[p.id] = PlayerContext(p)    
 
-        pad = "\n                         "
+        pad = " " #"\n                         "
         padTitle = "\n                "
-        print ("   CONTEXT UPD - ACTIVE  {}{} BETRAY  {}{} ELIM    {}".format(
+        print ("   CONTEXT UPD - ACTIVE ({:2}) {}{} BETRAY ({:2}) {}{} ELIM   ({:2}) {}".format(
+            len(self.activePlayers),
             pad.join(pc.id for pc in self.activePlayers.values()),
             padTitle,
+            len(self.betrayers),
             pad.join(pc.id for pc in self.betrayers.values()),
             padTitle,
+            len(self.eliminatedPlayers),
             pad.join(pc.id for pc in self.eliminatedPlayers.values())
             ))
 
@@ -84,8 +87,8 @@ class Context:
 
         description = "CONTEXT ({}/{}/{})\n  ACTIVE ({})\n    {}\n  ELIMINATED ({})\n    {}\n  BETRAYERS ({})\n    {}".format(
             len(self.activePlayers),
-            len(self.eliminatedPlayers),
             len(self.betrayers),
+            len(self.eliminatedPlayers),
             len(self.activePlayers), 
             "\n    ".join(p.describe() for p in self.activePlayers.values()),
             len(self.eliminatedPlayers), 

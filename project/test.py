@@ -20,7 +20,7 @@ def smokeTest():
     print ("Smoke Test")
     players = [] 
     for i in range(0,5):
-        #players.append(SimpleExample("Suicide {}".format(i), 100))
+        players.append(SimpleExample("Suicide {}".format(i), 100))
         players.append(RandomPlayer( "Rand    {}".format(i), 100))
 
     gameContext = GameContext(0, 0, 3)    
@@ -29,12 +29,23 @@ def smokeTest():
 
     print (t.scoreBoard())
 
+def instantiateGame():
+    print ("instantiateGame")
 
-smokeTest()
-#populateTable()
-#tablesDispatch()
-#fullGame()
-#instantiateGame()
+    players = [] 
+    for i in range(0,5):
+        players.append(SimpleExample("Suicide {}".format(i), 100))
+        players.append(RandomPlayer( "Rand    {}".format(i), 100))
+        players.append(BotPareto(    "Pareto  {}".format(i), 100))
+
+    gameContext = GameContext(0, 0, 3)    
+    t = Island(players, "testIsland", 0, gameContext)
+    t.playUntilLastMan()
+
+    print (t.scoreBoard())
+
+#smokeTest()
+instantiateGame()
 
 
 

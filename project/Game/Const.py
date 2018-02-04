@@ -11,7 +11,7 @@ class Const:
     STARTING_SCORE = 0
 
 # Misc constants
-    RANDOM_ID_LEN = 10
+    RANDOM_ID_LEN = 3
 
 # Score given to survivors
     SCORE_FOR_TRIAL = 1

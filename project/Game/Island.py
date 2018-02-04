@@ -109,8 +109,8 @@ class Island:
             else:
                 print ("  {} vote lost for  {}".format(p.name, p.decision.name))
 
-        print ("   ELIMINATION SCOREBOARD :\n     {}".format("\n     ".join(
-                "{:40} : {}".format(p.name, score) for p,score in elimination.items())))
+#        print ("   ELIMINATION SCOREBOARD :\n     {}".format("\n     ".join(
+#                "{:40} : {}".format(p.name, score) for p,score in elimination.items())))
 
         if (len(elimination) == 0):
             print ("   NO VOTES FOR holders - no elimination")
@@ -147,8 +147,8 @@ class Island:
 
     def tieBreak(self, tiedPlayers):
 
-        print ("-- TIE BREAK {}".format(
-            "\n             ".join(p.name for p in tiedPlayers)))
+        print ("-- TIE BREAK ({})".format(
+            " ".join(p.id for p in tiedPlayers)))
 
         self.context.registerTies(tiedPlayers)
 
@@ -185,7 +185,7 @@ class Island:
     def roundHeader(self):
         return "\n\n-- ROUND with {}/{}/{} (total {}) players".format(
                     len(self.activePlayers),
-                    len(self.eliminatedPlayers),
                     len(self.betrayers),
+                    len(self.eliminatedPlayers),
                     len(self.allPlayers)
             )
