@@ -30,35 +30,25 @@ class Island:
 
         while (len(self.activePlayers) > 0):
 
-            print ("\n\n-- ROUND with {}/{}/{} (total {}) players".format(
-                    len(self.activePlayers),
-                    len(self.eliminatedPlayers),
-                    len(self.betrayers),
-                    len(self.allPlayers)
-            ))
-
-            self.context.update(self)
-
-
+            print(self.roundHeader())
 
             for p in self.activePlayers.values():
                 p.decide(self.context)
 
-            #print ("BEFORE BETRAY \n{}".format(self.context.describe()))
             self.registerBetrayers(list(filter(lambda p: p.decision.id == p.id , self.activePlayers.values())))
-            #self.context.update(self)
-            #print ("AFTER BETRAY \n{}".format(self.context.describe()))
 
+            if (len(self.activePlayers) == 0):
+                return self.noWinner()
+                
             if (self.solveTrial() == False):
-                self.gameOver()
-            else:
-                for p in self.activePlayers.values():
-                    p.score += Const.SCORE_FOR_TRIAL
+                return self.gameOver()
 
-                self.voteAndEliminate(self.activePlayers.values())
+            self.voteAndEliminate(self.activePlayers.values())
 
-                if (len(self.activePlayers) == 1):
-                    self.victory()
+            if (len(self.activePlayers) == 1):
+                self.victory()
+
+        return
                 
 
     def solveTrial(self):
@@ -66,7 +56,10 @@ class Island:
         commonStrength = sum(p.strength for p in self.activePlayers.values())
 
         if (commonStrength > difficulty):
+            for p in self.activePlayers.values():
+                p.score += Const.SCORE_FOR_TRIAL
             return True
+
         else:
             return False
 
@@ -95,6 +88,9 @@ class Island:
     def gameOver(self):
         for p in self.betrayers.values():
             p.score += Const.SCORE_FOR_TRAITOR
+
+    def noWinner(self):
+        pass
 
     def voteAndEliminate(self, players):
         elimination = Counter()
@@ -170,3 +166,13 @@ class Island:
         displayBoard += "\n".join(p.describe() for p in orderedPlayers)
 
         return displayBoard
+
+
+
+    def roundHeader(self):
+        return "\n\n-- ROUND with {}/{}/{} (total {}) players".format(
+                    len(self.activePlayers),
+                    len(self.eliminatedPlayers),
+                    len(self.betrayers),
+                    len(self.allPlayers)
+            )
