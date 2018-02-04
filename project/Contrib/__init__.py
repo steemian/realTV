@@ -1,5 +1,5 @@
-from Contrib.SimpleExample import SimpleExample
-from Contrib.RandomPlayer import RandomPlayer
+from Contrib.SuicideExample import SuicideExample
+from Contrib.RandomExample import RandomExample
 
 
 #from Contrib. import 
