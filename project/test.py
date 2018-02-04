@@ -47,7 +47,7 @@ def manyRuns():
         ranks[p.__name__] = []
 
 
-    for i in range(0, 10):
+    for i in range(0, 100   ):
         a = Arena()
         a.runArena()
 
@@ -88,9 +88,4 @@ def eprintscores(scores, comment):
 #smokeTest()
 #instantiateGame()
 manyRuns()
-
-
-
-print ("\n\n\n------------------------------------\n\n")
-
 

@@ -73,7 +73,7 @@ class Arena:
 
 
     def runPhase(self, phaseIndex):
-        print ("\n\n\n--PHASE {}".format(phaseIndex))
+        print ("\n--PHASE {}".format(phaseIndex))
         self.makeIslands(phaseIndex)
         for isl in self.islands:
             isl.playUntilLastMan()

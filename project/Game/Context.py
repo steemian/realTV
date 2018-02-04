@@ -67,17 +67,17 @@ class Context:
 
         pad = " " #"\n                         "
         padTitle = "\n                      "
-        print ("   CONTEXT UPD (I={:2})- ACTIVE ({:2}) {}{} BETRAY ({:2}) {}{} ELIM   ({:2}) {}".format(
-            self.islandIndex,
-            len(self.activePlayers),
-            pad.join(pc.id for pc in self.activePlayers.values()),
-            padTitle,
-            len(self.betrayers),
-            pad.join(pc.id for pc in self.betrayers.values()),
-            padTitle,
-            len(self.eliminatedPlayers),
-            pad.join(pc.id for pc in self.eliminatedPlayers.values())
-            ))
+        #print ("   CONTEXT UPD (I={:2})- ACTIVE ({:2}) {}{} BETRAY ({:2}) {}{} ELIM   ({:2}) {}".format(
+        #    self.islandIndex,
+        #    len(self.activePlayers),
+        #    pad.join(pc.id for pc in self.activePlayers.values()),
+        #    padTitle,
+        #    len(self.betrayers),
+        #    pad.join(pc.id for pc in self.betrayers.values()),
+        #    padTitle,
+        ##    len(self.eliminatedPlayers),
+        #    pad.join(pc.id for pc in self.eliminatedPlayers.values())
+        #    ))
 
 
     def registerTies(self, ties):

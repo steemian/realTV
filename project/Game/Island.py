@@ -30,7 +30,7 @@ class Island:
 
         while (len(self.activePlayers) > 0):
 
-            print(self.roundHeader())
+            #print(self.roundHeader())
 
             for p in self.activePlayers.values():
                 p.decide(self.context)
@@ -71,7 +71,7 @@ class Island:
     def eliminate(self, playerId):
 
         p = self.allPlayers[playerId]
-        print ("   ELIMINATE {}".format(p.name))
+        #print ("   ELIMINATE {}".format(p.name))
 
         if p in self.activePlayers.values():
             del self.activePlayers[p.id]
@@ -80,7 +80,7 @@ class Island:
 
     def registerBetrayers(self, players):
         for p in players: 
-            print ("  {} **betrays**".format(p.name))
+            #print ("  {} **betrays**".format(p.name))
             self.betrayers[p.id] = p
             del self.activePlayers[p.id]
 
@@ -89,15 +89,23 @@ class Island:
     def victory(self):
         victor = next(iter(self.activePlayers.values()))
         victor.score += Const.SCORE_FOR_LASTMAN
-        print ("VICTORY for {}".format(victor.name))
+        print ("  Isl {}.{} : VICTORY for {}".format(
+            self.context.game.phaseIndex,
+            self.islandIndex,
+            victor.name))
 
     def gameOver(self):
         for p in self.betrayers.values():
             p.score += Const.SCORE_FOR_TRAITOR
-        print ("GAME OVER for {}".format(" ".join(p.id for p in self.activePlayers.values())))
+        print ("  Isl {}.{} : GAME OVER for {}".format(
+            self.context.game.phaseIndex,
+            self.islandIndex,
+            " ".join(p.id for p in self.activePlayers.values())))
 
     def noWinner(self):
-        print ("NO WINNER")
+        print ("  Isl {}.{} : NO WINNER".format(
+            self.context.game.phaseIndex,
+            self.islandIndex,))
 
 
     def voteAndEliminate(self, players):
@@ -105,16 +113,17 @@ class Island:
 
         for p in players:
             if (p.decision.id in list(p.id for p in players)):
-                print ("  {} votes elimination of {}".format(p.name, p.decision.name))
+                #print ("  {} votes elimination of {}".format(p.name, p.decision.name))
                 elimination[p.decision] += 1
             else:
-                print ("  {} vote lost for        {}".format(p.name, p.decision.name))
+                pass
+                #print ("  {} vote lost for        {}".format(p.name, p.decision.name))
 
 #        print ("   ELIMINATION SCOREBOARD :\n     {}".format("\n     ".join(
 #                "{:40} : {}".format(p.name, score) for p,score in elimination.items())))
 
         if (len(elimination) == 0):
-            print ("   NO VOTES FOR holders - no elimination")
+            #print ("   NO VOTES FOR holders - no elimination")
             return
 
         ties = self.getTies(elimination)
@@ -148,8 +157,8 @@ class Island:
 
     def tieBreak(self, tiedPlayers):
 
-        print ("-- TIE BREAK ({})".format(
-            " ".join(p.id for p in tiedPlayers)))
+        #print ("-- TIE BREAK ({})".format(
+        #    " ".join(p.id for p in tiedPlayers)))
 
         self.context.registerTies(tiedPlayers)
 
@@ -157,7 +166,7 @@ class Island:
 
         for p in self.activePlayers.values():
             decision = p.voteForTie(self.context)
-            print ("    TIE : {} votes {}".format(p.name, decision.name))
+            #print ("    TIE : {} votes {}".format(p.name, decision.name))
             if (decision.id in list(pc.id for pc in tiedPlayers)):
                 elimination[decision] += 1
             else:
@@ -174,7 +183,7 @@ class Island:
 
 
     def scoreBoard(self):
-        displayBoard = "\n\n-------SCORE BOARD for Island #{}\n".format(self.islandIndex)
+        #displayBoard = "\n\n-------SCORE BOARD for Island #{}\n".format(self.islandIndex)
         orderedPlayers = sorted(self.allPlayers.values(), key=lambda p: p.score, reverse=True)
         
         displayBoard += "\n".join(p.describe() for p in orderedPlayers)
@@ -184,7 +193,7 @@ class Island:
 
 
     def roundHeader(self):
-        return "\n\n-- Isl {}.{} - ROUND with {}/{}/{} (total {}) players".format(
+        return "-- Isl {}.{} - ROUND with {}/{}/{} (total {}) players".format(
                     self.context.game.phaseIndex, 
                     self.islandIndex,
                     len(self.activePlayers),
