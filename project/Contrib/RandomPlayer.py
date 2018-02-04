@@ -18,5 +18,5 @@ class RandomPlayer(Player):
             print (" !!   {} is offered an empty tie break !!!".format(self.name))
             return None
 
-        return random.choice(context.currentTies)
+        return random.choice(list(context.currentTies.values()))
 

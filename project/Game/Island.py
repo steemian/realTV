@@ -107,7 +107,7 @@ class Island:
                 print ("  {} votes elimination of {}".format(p.name, p.decision.name))
                 elimination[p.decision] += 1
             else:
-                print ("  {} vote lost for  {}".format(p.name, p.decision.name))
+                print ("  {} vote lost for        {}".format(p.name, p.decision.name))
 
 #        print ("   ELIMINATION SCOREBOARD :\n     {}".format("\n     ".join(
 #                "{:40} : {}".format(p.name, score) for p,score in elimination.items())))

@@ -80,7 +80,10 @@ class Context:
 
 
     def registerTies(self, ties):
-        self.currentTies = list(self.activePlayers[pc.id] for pc in ties)
+        self.currentTies = {}
+        for pc in ties:
+            self.currentTies[pc.id] = pc
+        
 
 
     def describe(self):
