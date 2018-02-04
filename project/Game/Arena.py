@@ -18,6 +18,7 @@ class Arena:
         SuicideExample,
         MinExample,
         MaxExample,
+        SensibleExample,
     ]
 
     availableBots = [

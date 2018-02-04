@@ -16,11 +16,17 @@ class IslandStats:
 		self.VICTORIES = 0
 		self.NOWINNERS = 0
 		self.GAMEOVERS = []
+		self.PointsForTrial = 0
+		self.PointsForGO = 0
+		self.PointsForVic = 0
 
 	def add(self, other):
 		self.VICTORIES += other.VICTORIES
 		self.NOWINNERS += other.NOWINNERS
 		self.GAMEOVERS += other.GAMEOVERS
+		self.PointsForTrial += other.PointsForTrial
+		self.PointsForGO += other.PointsForGO
+		self.PointsForVic += other.PointsForVic
 
 	def describe(self):
 
@@ -32,12 +38,20 @@ class IslandStats:
 		sigma = sigma2 ** 0.5
 
 		return ("" +
+				"    Pts for VICTORY  = {}\n" +				
+				"    Pts for GAMEOVER = {}\n" +				
+				"    Pts for Trial    = {}\n" +				
+				"    -------\n"
 				"    VICTORIES = {}\n" +
 				"    NOWINNERS = {}\n" +
 				"    GAMEOVERS = {}\n" +
 				"    GAMEOVERS avg = {:.2f}\n" +
 				"    GAMEOVERS sig = {:.2f}\n" +
 				"").format(
+					self.PointsForVic,
+					self.PointsForGO,
+					self.PointsForTrial,
+
 					self.VICTORIES,
 					self.NOWINNERS,
 					len(self.GAMEOVERS),
