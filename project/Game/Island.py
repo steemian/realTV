@@ -14,7 +14,7 @@ class Island:
 
     def __init__(self, players, name, islandIndex, gameContext):
         shuffle(players)
-        #print ("Creating island with {}".format(players))
+        #print ("Creating island with CTX={}\n              PL={}".format(gameContext, players))
         self.allPlayers = {}
         self.eliminatedPlayers = {}
         self.betrayers = {}
@@ -94,9 +94,10 @@ class Island:
     def gameOver(self):
         for p in self.betrayers.values():
             p.score += Const.SCORE_FOR_TRAITOR
+        print ("GAME OVER for {}".format(" ".join(p.id for p in self.activePlayers.values())))
 
     def noWinner(self):
-        return
+        print ("NO WINNER")
 
 
     def voteAndEliminate(self, players):
@@ -183,7 +184,9 @@ class Island:
 
 
     def roundHeader(self):
-        return "\n\n-- ROUND with {}/{}/{} (total {}) players".format(
+        return "\n\n-- Isl {}.{} - ROUND with {}/{}/{} (total {}) players".format(
+                    self.context.game.phaseIndex, 
+                    self.islandIndex,
                     len(self.activePlayers),
                     len(self.betrayers),
                     len(self.eliminatedPlayers),

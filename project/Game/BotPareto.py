@@ -2,9 +2,17 @@ import random, string
 
 from Game.Const import Const
 from Game.Player import Player
+        
 
 class BotPareto (Player):
     
+    def __init__(self, name, strength):
+        super(BotPareto, self).__init__(name, strength)
+        self.id = "-" + self.id[1:]
+        self.name = "[{:10} {:2} ({:15})]".format(name, self.id, type(self).__name__)
+
+
+
     def getSteemUser(self):
         return ""
 
