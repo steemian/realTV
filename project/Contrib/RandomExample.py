@@ -3,7 +3,7 @@ import random
 from Game.Player import Player
 
 
-class RandomPlayer(Player):
+class RandomExample(Player):
 
 
     def getSteemUser(self):

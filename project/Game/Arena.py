@@ -5,7 +5,7 @@ from collections import Counter
 
 from Contrib import *
 from Game.BotPareto import *
-import Game.League, Game.Const
+import Game.Const
 from Game.Context import Context, GameContext 
 from Game.Island import Island
 
@@ -13,8 +13,10 @@ from Game.Island import Island
 class Arena:
     
     availablePlayers =  [
-        RandomPlayer,
-        SimpleExample,
+        RandomExample,
+        SuicideExample,
+        MinExample,
+        MaxExample,
     ]
 
     availableBots = [
