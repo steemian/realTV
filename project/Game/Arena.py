@@ -78,7 +78,7 @@ class Arena:
         for isl in self.islands:
             isl.playUntilLastMan()
 
-        self.displayResults()
+        #self.displayResults()
         print("")
         print("")
         print("")
