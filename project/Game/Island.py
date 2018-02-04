@@ -90,14 +90,18 @@ class Island:
             p.score += Const.SCORE_FOR_TRAITOR
 
     def noWinner(self):
-        pass
+        return
+
 
     def voteAndEliminate(self, players):
         elimination = Counter()
 
         for p in players:
-            print ("  {} votes elimination of {}".format(p.name, p.decision.name))
-            elimination[p.decision] += 1
+            if (p.decision.id in list(p.id for p in players)):
+                print ("  {} votes elimination of {}".format(p.name, p.decision.name))
+                elimination[p.decision] += 1
+            else:
+                print ("  {} vote lost for  {}".format(p.name, p.decision.name))
 
         print ("   ELIMINATION SCOREBOARD :\n     {}".format("\n     ".join(
                 "{:40} : {}".format(p.name, score) for p,score in elimination.items())))
