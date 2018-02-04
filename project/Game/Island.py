@@ -100,10 +100,10 @@ class Island:
         victor.score += Const.SCORE_FOR_LASTMAN
         self.stats.PointsForVic += Const.SCORE_FOR_LASTMAN
         self.stats.VICTORIES += 1
-        print ("  Isl {}.{} : VICTORY for {}".format(
-            self.context.game.phaseIndex,
-            self.islandIndex,
-            victor.name))
+#        print ("  Isl {}.{} : VICTORY for {}".format(
+#            self.context.game.phaseIndex,
+#            self.islandIndex,
+#            victor.name))
 
     def gameOver(self):
         for p in self.betrayers.values():
@@ -113,16 +113,16 @@ class Island:
             self.stats.PointsForGO += Const.SCORE_FOR_ALL_TRAITORS / len(self.betrayers)
 
         self.stats.GAMEOVERS.append(len(self.betrayers))    
-        print ("  Isl {}.{} : GAME OVER for {}".format(
-            self.context.game.phaseIndex,
-            self.islandIndex,
-            " ".join(p.id for p in self.activePlayers.values())))
+#        print ("  Isl {}.{} : GAME OVER for {}".format(
+#            self.context.game.phaseIndex,
+#            self.islandIndex,
+#            " ".join(p.id for p in self.activePlayers.values())))
 
     def noWinner(self):
         self.stats.NOWINNERS += 1
-        print ("  Isl {}.{} : NO WINNER".format(
-            self.context.game.phaseIndex,
-            self.islandIndex,))
+#        print ("  Isl {}.{} : NO WINNER".format(
+#            self.context.game.phaseIndex,
+#            self.islandIndex,))
 
 
     def voteAndEliminate(self, players):

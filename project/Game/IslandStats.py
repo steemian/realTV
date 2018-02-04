@@ -39,7 +39,7 @@ class IslandStats:
 
 		return ("" +
 				"    Pts for VICTORY  = {}\n" +				
-				"    Pts for GAMEOVER = {}\n" +				
+				"    Pts for GAMEOVER = {:.0f}\n" +				
 				"    Pts for Trial    = {}\n" +				
 				"    -------\n"
 				"    VICTORIES = {}\n" +

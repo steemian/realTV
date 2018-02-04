@@ -14,11 +14,15 @@ from Game.IslandStats import IslandStats
 class Arena:
     
     availablePlayers =  [
-        RandomExample,
-        SuicideExample,
+#        RandomExample,
+#        SuicideExample,
         MinExample,
         MaxExample,
-        SensibleExample,
+        SensibleExample0,
+        SensibleExample1,
+        SensibleExample2,
+        SensibleExample3,
+        SensibleExample4,
     ]
 
     availableBots = [
@@ -76,22 +80,13 @@ class Arena:
 
 
     def runPhase(self, phaseIndex):
-        print ("\n--PHASE {}".format(phaseIndex))
+        #print ("\n--PHASE {}".format(phaseIndex))
         self.makeIslands(phaseIndex)
         for isl in self.islands:
             isl.playUntilLastMan()
             self.stats.add(isl.stats)
 
         #self.displayResults()
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
 
 
     def mkBot():
