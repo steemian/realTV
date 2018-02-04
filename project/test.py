@@ -43,13 +43,17 @@ def manyRuns():
 
     totalScores = Counter()
     ranks = {}
+    stats = IslandStats()
     for p in Arena.availablePlayers:
         ranks[p.__name__] = []
 
 
-    for i in range(0, 100   ):
+    for i in range(0, Const.NB_RUNS_FOR_STATS   ):
         a = Arena()
         a.runArena()
+
+        # Accumulate stats
+        stats.add(a.stats)
 
         # Accumulate scores
         localScores = Counter()
@@ -66,14 +70,17 @@ def manyRuns():
 
     eprintscores(totalScores, "Iteration {}".format(i))
     eprintRanks(ranks, "Iteration {}".format(i))
+    eprintStats(stats, "Iteration {}".format(i))
 
 
 def eprintRanks(ranks, comment):
-
     eprint("\n RANKS {}".format(comment))
     for player,rk in ranks.items():
         eprint("{:30} - {}".format(player, " ".join(str(i) for i in rk )))
 
+def eprintStats(stats, comment):
+    eprint("\n STATS {}\n{}".format(comment, stats.describe()))
+    
 
 
 def eprintscores(scores, comment):
@@ -81,7 +88,7 @@ def eprintscores(scores, comment):
     index = 1
     eprint("\n SCORES {}".format(comment))
     for k in sortedScores:  
-        eprint ("{:3} - {:3}   {}".format(index, scores[k], k))
+        eprint ("{:3} - {:6.0f}   {}".format(index, scores[k], k))
         index += 1
 
 

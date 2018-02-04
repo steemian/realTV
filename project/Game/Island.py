@@ -7,6 +7,7 @@ from collections import Counter
 from Game.Player import Player
 from Game.Context import Context, PlayerContext
 from Game.Const import Const
+from Game.IslandStats import IslandStats
 
 
 class Island:
@@ -24,6 +25,7 @@ class Island:
         self.islandIndex = islandIndex
         self.name = name
         self.context = Context(self, gameContext)
+        self.stats = IslandStats()
 
 
     def playUntilLastMan(self):
@@ -89,6 +91,7 @@ class Island:
     def victory(self):
         victor = next(iter(self.activePlayers.values()))
         victor.score += Const.SCORE_FOR_LASTMAN
+        self.stats.VICTORIES += 1
         print ("  Isl {}.{} : VICTORY for {}".format(
             self.context.game.phaseIndex,
             self.islandIndex,
@@ -96,13 +99,16 @@ class Island:
 
     def gameOver(self):
         for p in self.betrayers.values():
-            p.score += Const.SCORE_FOR_TRAITOR
+            p.score += Const.SCORE_FOR_EACH_TRAITOR
+            p.score += Const.SCORE_FOR_ALL_TRAITORS / len(self.betrayers)
+        self.stats.GAMEOVERS.append(len(self.betrayers))    
         print ("  Isl {}.{} : GAME OVER for {}".format(
             self.context.game.phaseIndex,
             self.islandIndex,
             " ".join(p.id for p in self.activePlayers.values())))
 
     def noWinner(self):
+        self.stats.NOWINNERS += 1
         print ("  Isl {}.{} : NO WINNER".format(
             self.context.game.phaseIndex,
             self.islandIndex,))

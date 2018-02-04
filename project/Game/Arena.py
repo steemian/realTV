@@ -8,6 +8,7 @@ from Game.BotPareto import *
 import Game.Const
 from Game.Context import Context, GameContext 
 from Game.Island import Island
+from Game.IslandStats import IslandStats
 
 
 class Arena:
@@ -28,6 +29,7 @@ class Arena:
     def __init__(self):
         self.humans = []
         self.islands = []
+        self.stats = IslandStats()
         for str in Const.INSTANCES_STRENGTH:
             for p in self.availablePlayers:
                 self.humans.append(p("STR={}".format(str), str))
@@ -77,6 +79,7 @@ class Arena:
         self.makeIslands(phaseIndex)
         for isl in self.islands:
             isl.playUntilLastMan()
+            self.stats.add(isl.stats)
 
         #self.displayResults()
         print("")
