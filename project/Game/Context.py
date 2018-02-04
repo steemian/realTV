@@ -27,21 +27,32 @@ class GameContext:
 
 
 
+class historyContext(object):
+
+        def __init__(self):
+            self.playerActions = {}    
+
+
+
+
+
 
 class Context:
 
     def __init__(self, island, gameContext):
-        #self.payouts = []
         self.islandIndex = island.islandIndex
         self.game = gameContext
-        self.update(island)
+        self.history = []
+        self.update(island, None)
 
 
-    def update(self, island):
+    def update(self, island, lastTurnHistory):
         self.activePlayers = {}
         self.betrayers = {}
         self.eliminatedPlayers = {}
         self.currentTies = []
+        if (lastTurnHistory != None):
+            self.history.append(lastTurnHistory) 
 
         for p in island.activePlayers.values():
             self.activePlayers[p.id] = PlayerContext(p)
@@ -52,7 +63,7 @@ class Context:
 
 
     def registerTies(self, ties):
-        self.currentTies = list(p.id for p in ties)
+        self.currentTies = list(self.activePlayers[pc.id] for pc in ties)
 
 
     def describe(self):
