@@ -43,6 +43,9 @@ class Island:
             if (self.solveTrial() == False):
                 return self.gameOver()
 
+
+            lastTurn = None
+            self.context.update(self, lastTurn)
             self.voteAndEliminate(self.activePlayers.values())
 
             if (len(self.activePlayers) == 1):
@@ -79,6 +82,7 @@ class Island:
             print ("  {} **betrays**".format(p.name))
             self.betrayers[p.id] = p
             del self.activePlayers[p.id]
+
         
 
     def victory(self):
@@ -106,29 +110,38 @@ class Island:
         print ("   ELIMINATION SCOREBOARD :\n     {}".format("\n     ".join(
                 "{:40} : {}".format(p.name, score) for p,score in elimination.items())))
 
-        ties = []
-        mostVotes = 0
-        for player,votes in elimination.items():
-            if (len(ties) == 0):
-                ties = [player]
-                mostVotes = votes
-            else:
-                if (votes == mostVotes):
-                    ties.append(player)
-                else: 
-                    if (votes > mostVotes):
-                        ties = [player]
-                        mostVotes = votes
-            #print("   * leader= {:2} {}".format(
-            #    mostVotes, 
-            #    "\n                ".join(p.name for p in ties)))
+        if (len(elimination) == 0):
+            print ("   NO VOTES FOR holders - no elimination")
+            return
 
-
-
+        ties = self.getTies(elimination)
         if (len(ties) == 1):
             self.eliminate(ties[0].id)
         else:
             self.tieBreak(ties)
+
+
+    def getTies(self, eliminationCounter):
+        ties = []
+        mostVotes = 0
+        for player,votes in eliminationCounter.items():
+            if (len(ties) == 0):
+                ties = [player]
+                mostVotes = votes
+                #print("   * leader= {:2} {}".format(mostVotes, "\n                ".join(p.name for p in ties)))
+
+            else:
+                if (votes == mostVotes):
+                    ties.append(player)
+                    #print("   * leader= {:2} {}".format(mostVotes, "\n                ".join(p.name for p in ties)))
+
+                else: 
+                    if (votes > mostVotes):
+                        ties = [player]
+                        mostVotes = votes
+                        #print("   * leader= {:2} {}".format(mostVotes, "\n                ".join(p.name for p in ties)))
+        return ties
+
 
     def tieBreak(self, tiedPlayers):
 
@@ -141,24 +154,18 @@ class Island:
 
         for p in self.activePlayers.values():
             decision = p.voteForTie(self.context)
-            if (decision in tiedPlayers):
+            print ("    TIE : {} votes {}".format(p.name, decision.name))
+            if (decision.id in list(pc.id for pc in tiedPlayers)):
                 elimination[decision] += 1
-
-
-        tiedAgain = []
-        mostVotes = 0
-        for player,votes in elimination.items():
-            if (len(tiedAgain) == 0):
-                tiedAgain = [player]
-                mostVotes = votes
             else:
-                if (votes == mostVotes):
-                    tiedAgain.append(player)
-                else: 
-                    if (votes > mostVotes):
-                        tiedAgain = [player]
-                        mostVotes = votes
+                print (" !! Invalid tie vote {} for {} - VOTE SELF".format(
+                    p.name,
+                    decision.name
+                    ))
+                elimination[p] += 1
 
+
+        tiedAgain =  self.getTies(elimination)
         for bye in tiedAgain:
             self.eliminate(bye.id)
 
