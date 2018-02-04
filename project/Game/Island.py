@@ -43,13 +43,14 @@ class Island:
             if (self.solveTrial() == False):
                 return self.gameOver()
 
-
-            lastTurn = None
-            self.context.update(self, lastTurn)
             self.voteAndEliminate(self.activePlayers.values())
 
             if (len(self.activePlayers) == 1):
                 self.victory()
+                return
+
+            lastTurn = None
+            self.context.update(self, lastTurn)
 
         return
                 
@@ -86,8 +87,9 @@ class Island:
         
 
     def victory(self):
-        key, victor = self.activePlayers.popitem()
+        victor = next(iter(self.activePlayers.values()))
         victor.score += Const.SCORE_FOR_LASTMAN
+        print ("VICTORY for {}".format(victor.name))
 
     def gameOver(self):
         for p in self.betrayers.values():

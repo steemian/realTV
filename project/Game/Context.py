@@ -47,6 +47,10 @@ class Context:
 
 
     def update(self, island, lastTurnHistory):
+
+        # TODO: have a look at dictionary.update(dic)
+        # at https://www.programiz.com/python-programming/methods/dictionary/update
+
         self.activePlayers = {}
         self.betrayers = {}
         self.eliminatedPlayers = {}
@@ -60,6 +64,16 @@ class Context:
             self.betrayers[p.id] = PlayerContext(p)
         for p in island.eliminatedPlayers.values():
             self.eliminatedPlayers[p.id] = PlayerContext(p)    
+
+        pad = "\n                         "
+        padTitle = "\n                "
+        print ("   CONTEXT UPD - ACTIVE  {}{} BETRAY  {}{} ELIM    {}".format(
+            pad.join(pc.id for pc in self.activePlayers.values()),
+            padTitle,
+            pad.join(pc.id for pc in self.betrayers.values()),
+            padTitle,
+            pad.join(pc.id for pc in self.eliminatedPlayers.values())
+            ))
 
 
     def registerTies(self, ties):
