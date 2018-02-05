@@ -1,7 +1,7 @@
 from Game.Player import Player
 
 
-class SimpleExample(Player):
+class SuicideExample(Player):
 
 
     def getSteemUser(self):

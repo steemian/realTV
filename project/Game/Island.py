@@ -7,6 +7,7 @@ from collections import Counter
 from Game.Player import Player
 from Game.Context import Context, PlayerContext
 from Game.Const import Const
+from Game.IslandStats import IslandStats
 
 
 class Island:
@@ -24,6 +25,7 @@ class Island:
         self.islandIndex = islandIndex
         self.name = name
         self.context = Context(self, gameContext)
+        self.stats = IslandStats()
 
 
     def playUntilLastMan(self):
@@ -39,8 +41,12 @@ class Island:
 
             if (len(self.activePlayers) == 0):
                 return self.noWinner()
+
+            if (len(self.activePlayers) == 1):
+                self.victory()
+                return
                 
-            if (self.solveTrial() == False):
+            if (self.solveTrial(len(self.activePlayers)) == False):
                 return self.gameOver()
 
             self.voteAndEliminate(self.activePlayers.values())
@@ -55,13 +61,14 @@ class Island:
         return
                 
 
-    def solveTrial(self):
-        difficulty = Const.DIFFICULTY_A * len(self.activePlayers) + Const.DIFFICULTY_B
+    def solveTrial(self, nbPlayers):
+        difficulty = Const.DIFFICULTY_A * nbPlayers + Const.DIFFICULTY_B
         commonStrength = sum(p.strength for p in self.activePlayers.values())
 
         if (commonStrength > difficulty):
             for p in self.activePlayers.values():
                 p.score += Const.SCORE_FOR_TRIAL
+                self.stats.PointsForTrial += Const.SCORE_FOR_TRIAL
             return True
 
         else:
@@ -89,15 +96,31 @@ class Island:
     def victory(self):
         victor = next(iter(self.activePlayers.values()))
         victor.score += Const.SCORE_FOR_LASTMAN
-        print ("VICTORY for {}".format(victor.name))
+        self.stats.PointsForVic += Const.SCORE_FOR_LASTMAN
+        self.stats.VICTORIES += 1
+        print ("  Isl {}.{} : VICTORY for {}".format(
+            self.context.game.phaseIndex,
+            self.islandIndex,
+            victor.name))
 
     def gameOver(self):
         for p in self.betrayers.values():
-            p.score += Const.SCORE_FOR_TRAITOR
-        print ("GAME OVER for {}".format(" ".join(p.id for p in self.activePlayers.values())))
+            p.score += Const.SCORE_FOR_EACH_TRAITOR
+            p.score += Const.SCORE_FOR_ALL_TRAITORS / len(self.betrayers)
+            self.stats.PointsForGO += Const.SCORE_FOR_EACH_TRAITOR
+            self.stats.PointsForGO += Const.SCORE_FOR_ALL_TRAITORS / len(self.betrayers)
+
+        self.stats.GAMEOVERS.append(len(self.betrayers))    
+        print ("  Isl {}.{} : GAME OVER for {}".format(
+            self.context.game.phaseIndex,
+            self.islandIndex,
+            " ".join(p.id for p in self.activePlayers.values())))
 
     def noWinner(self):
-        print ("NO WINNER")
+        self.stats.NOWINNERS += 1
+        print ("  Isl {}.{} : NO WINNER".format(
+            self.context.game.phaseIndex,
+            self.islandIndex,))
 
 
     def voteAndEliminate(self, players):
@@ -108,6 +131,7 @@ class Island:
                 print ("  {} votes elimination of {}".format(p.name, p.decision.name))
                 elimination[p.decision] += 1
             else:
+                pass
                 print ("  {} vote lost for        {}".format(p.name, p.decision.name))
 
 #        print ("   ELIMINATION SCOREBOARD :\n     {}".format("\n     ".join(
@@ -184,7 +208,7 @@ class Island:
 
 
     def roundHeader(self):
-        return "\n\n-- Isl {}.{} - ROUND with {}/{}/{} (total {}) players".format(
+        return "-- Isl {}.{} - ROUND with {}/{}/{} (total {}) players".format(
                     self.context.game.phaseIndex, 
                     self.islandIndex,
                     len(self.activePlayers),

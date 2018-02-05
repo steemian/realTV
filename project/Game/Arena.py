@@ -5,16 +5,24 @@ from collections import Counter
 
 from Contrib import *
 from Game.BotPareto import *
-import Game.League, Game.Const
+import Game.Const
 from Game.Context import Context, GameContext 
 from Game.Island import Island
+from Game.IslandStats import IslandStats
 
 
 class Arena:
     
     availablePlayers =  [
-        RandomPlayer,
-        SimpleExample,
+#        RandomExample,
+#        SuicideExample,
+        MinExample,
+        MaxExample,
+        SensibleExample0,
+        SensibleExample1,
+        SensibleExample2,
+        SensibleExample3,
+        SensibleExample4,
     ]
 
     availableBots = [
@@ -26,6 +34,7 @@ class Arena:
     def __init__(self):
         self.humans = []
         self.islands = []
+        self.stats = IslandStats()
         for str in Const.INSTANCES_STRENGTH:
             for p in self.availablePlayers:
                 self.humans.append(p("STR={}".format(str), str))
@@ -71,21 +80,13 @@ class Arena:
 
 
     def runPhase(self, phaseIndex):
-        print ("\n\n\n--PHASE {}".format(phaseIndex))
+        print ("\n--PHASE {}".format(phaseIndex))
         self.makeIslands(phaseIndex)
         for isl in self.islands:
             isl.playUntilLastMan()
+            self.stats.add(isl.stats)
 
         self.displayResults()
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
 
 
     def mkBot():
