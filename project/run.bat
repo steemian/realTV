@@ -1,8 +1,8 @@
 @echo off
 
 
-:INFINITE
-    cls
-    python __main__.py
-    pause
-    goto INFINITE
+
+cls
+python __main__.py > run.log
+pause
+    
