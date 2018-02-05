@@ -9,13 +9,17 @@ class SensibleExample (Player):
 
     THRESHOLD_MAX = 50
     THRESHOLD_MIN = -30
+    THRESHOLD_DROP = 35
 
     def getSteemUser(self):
         return ""
 
     def voteForElimination(self, context):
         difficulty = Const.DIFFICULTY_A * len(context.activePlayers) + Const.DIFFICULTY_B
-        estStr = sum(p.strength for p in context.activePlayers.values() if p.strength > 35)
+        estStr = sum(p.strength for p in context.activePlayers.values() if p.strength > self.THRESHOLD_DROP)
+
+        if (self.strength < self.THRESHOLD_DROP and difficulty > self.strength*len(context.activePlayers)):
+            return self
 
         if (estStr > difficulty + self.THRESHOLD_MAX):
             return self.Max(context.activePlayers.values())
@@ -44,6 +48,7 @@ class SensibleExample0 (SensibleExample):
         super(SensibleExample0, self).__init__(name, strength)
         self.THRESHOLD_MIN = Const.AI_TUNE[0][0]
         self.THRESHOLD_MAX = Const.AI_TUNE[0][1]
+        self.THRESHOLD_DROP = Const.AI_TUNE[0][2]
 
 class SensibleExample1 (SensibleExample):
 
@@ -51,7 +56,7 @@ class SensibleExample1 (SensibleExample):
         super(SensibleExample1, self).__init__(name, strength)
         self.THRESHOLD_MIN = Const.AI_TUNE[1][0]
         self.THRESHOLD_MAX = Const.AI_TUNE[1][1]
-
+        self.THRESHOLD_DROP = Const.AI_TUNE[1][2]
 
 class SensibleExample2 (SensibleExample):
 
@@ -59,7 +64,7 @@ class SensibleExample2 (SensibleExample):
         super(SensibleExample2, self).__init__(name, strength)
         self.THRESHOLD_MIN = Const.AI_TUNE[2][0]
         self.THRESHOLD_MAX = Const.AI_TUNE[2][1]
-
+        self.THRESHOLD_DROP = Const.AI_TUNE[2][2]
 
 class SensibleExample3 (SensibleExample):
 
@@ -67,7 +72,7 @@ class SensibleExample3 (SensibleExample):
         super(SensibleExample3, self).__init__(name, strength)
         self.THRESHOLD_MIN = Const.AI_TUNE[3][0]
         self.THRESHOLD_MAX = Const.AI_TUNE[3][1]
-
+        self.THRESHOLD_DROP = Const.AI_TUNE[3][2]
 
 class SensibleExample4 (SensibleExample):
 
@@ -75,3 +80,4 @@ class SensibleExample4 (SensibleExample):
         super(SensibleExample4, self).__init__(name, strength)
         self.THRESHOLD_MIN = Const.AI_TUNE[4][0]
         self.THRESHOLD_MAX = Const.AI_TUNE[4][1]
+        self.THRESHOLD_DROP = Const.AI_TUNE[4][2]
