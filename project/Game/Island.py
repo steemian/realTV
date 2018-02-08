@@ -193,8 +193,9 @@ class Island:
 
 
         tiedAgain =  self.getTies(elimination)
-        for bye in tiedAgain:
-            self.eliminate(bye.id)
+        self.eliminate(min(lambda p:p.strength, tiedAgain))
+#        for bye in tiedAgain:
+#            self.eliminate(bye.id)
 
 
     def scoreBoard(self):

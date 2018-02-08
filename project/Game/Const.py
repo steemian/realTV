@@ -13,7 +13,7 @@ class Const:
     NB_RUNS_FOR_STATS = 1
 
 # Misc constants
-    RANDOM_ID_LEN = 3
+    RANDOM_ID_LEN = 10
 
 # Score given to survivors
     SCORE_FOR_TRIAL = 3
@@ -27,8 +27,8 @@ class Const:
     DIFFICULTY_B = -3
 
     AI_TUNE = [ [-30, 30, 2],
+                [-3, 3, 3],
+                [-3, 30, 3],
+                [-30, 3, 3],
                 [-30, 30, 3],
-                [-30, 30, 4],
-                [-30, 30, 5],
-                [-30, 30, 6],
             ]
