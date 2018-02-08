@@ -132,11 +132,11 @@ class Island:
 
         for p in players:
             if (p.decision.id in list(p.id for p in players)):
-                print ("  {} votes elimination of {}".format(p.longDescribe(), p.decision.longDescribe()))
+                #print ("  {} votes elimination of {}".format(p.longDescribe(), p.decision.longDescribe()))
                 elimination[p.decision] += 1
             else:
                 pass
-                print ("  {} vote lost for        {}".format(p.longDescribe(), p.decision.longDescribe()))
+                #print ("  {} vote lost for        {}".format(p.longDescribe(), p.decision.longDescribe()))
 
 #        print ("   ELIMINATION SCOREBOARD :\n     {}".format("\n     ".join(
 #                "{:40} : {}".format(p.longDescribe(), score) for p,score in elimination.items())))
@@ -194,9 +194,9 @@ class Island:
                     ))
 
         tiedAgain =  self.getTies(elimination)
-        self.eliminate(min(tiedAgain, key=lambda p:p.strength))
-#        for bye in tiedAgain:
-#            self.eliminate(bye.id)
+        eliminated = min(tiedAgain, key=lambda p:p.strength)
+        #print ("TIED AGAIN {} chosen from {}".format(eliminated.shortDescribe(), " ".join(p.id for p in tiedAgain)))
+        self.eliminate(eliminated)
 
 
     def scoreBoard(self):

@@ -19,7 +19,7 @@ On each island, every day:
 * First, players vote for elimination
 * Players who voted for themselves are considered traitors, and all traitors leave the island
 * Non-traitor players have to solve a trial together. The sum of their strength must be equal or more than the `difficulty`, or they collectively fail and the island is disbanded
-* Then the remaining player with the most votes leaves the island. If there's a tie, players are called again for tie break. In case of a second tie, all tied players leave the island.
+* Then the remaining player with the most votes leaves the island. If there's a tie, players are called again for tie break. In case of a second tie, the weakest player leaves. If they are same strength, the leaver is randomly chosen
 * Next day starts unless there is only one player left (that player wins) or no player at all (no winner and no points awarded)
 
 ```
