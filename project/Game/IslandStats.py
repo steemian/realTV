@@ -30,12 +30,16 @@ class IslandStats:
 
 	def describe(self):
 
-		avg = sum(self.GAMEOVERS) / len(self.GAMEOVERS)
-		sigma2 = 0
-		for i in self.GAMEOVERS:
-			sigma2 +=  (i-avg) ** 2
-		sigma2 /= len(self.GAMEOVERS)	
-		sigma = sigma2 ** 0.5
+		if (len(self.GAMEOVERS) == 0):
+			avg = -1
+			sigma = -1
+		else:
+			avg = sum(self.GAMEOVERS) / len(self.GAMEOVERS)
+			sigma2 = 0
+			for i in self.GAMEOVERS:
+				sigma2 +=  (i-avg) ** 2
+			sigma2 /= len(self.GAMEOVERS)	
+			sigma = sigma2 ** 0.5
 
 		return ("" +
 				"    Pts for VICTORY  = {}\n" +				

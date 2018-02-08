@@ -9,7 +9,6 @@ class BotPareto (Player):
     def __init__(self, name, strength):
         super(BotPareto, self).__init__(name, strength)
         self.id = "-" + self.id[1:]
-        self.name = "[{:10} {:2} ({:15})]".format(name, self.id, type(self).__name__)
 
 
 
@@ -23,7 +22,7 @@ class BotPareto (Player):
         return self.MinOrMax(context.currentTies.values())
 
     def MinOrMax(self, players):
-        if (random.random() < 0.2):
+        if (random.random() > 0.2):
             targetStr = min(p.strength for p in players)
         else:
             targetStr = max(p.strength for p in players)

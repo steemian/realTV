@@ -112,7 +112,7 @@ class Arena:
         self.humans.sort(reverse=True, key=lambda p:p.score )
         index = 1
         for p in self.humans:
-            print ("{:3} - {:3}   {}".format(index, p.score, p.name))
+            print ("{:3} - {:3}   {}".format(index, p.score, p.longDescribe()))
             index += 1
 
         print ("")

@@ -10,13 +10,18 @@ class PlayerContext:
 
     def __init__(self, player):
         self.id = player.id
+        self.name = type(player).__name__
+        self._longDescript = player.longDescribe()
+        self._shortDescript = player.shortDescribe()
         self.previousMoves = []
-        self.name = player.name
         self.strength = player.strength
 
 
-    def describe(self):
-        return "[{:50} #{} STR={}]".format(self.name, self.id, self.strength)
+    def shortDescribe(self):
+        return self._shortDescript
+
+    def longDescribe(self):
+        return self._longDescript
 
 
 class GameContext:

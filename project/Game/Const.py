@@ -10,7 +10,7 @@ class Const:
 # Game constants
     PHASES_PER_GAME = 100
     STARTING_SCORE = 0
-    NB_RUNS_FOR_STATS = 20
+    NB_RUNS_FOR_STATS = 1
 
 # Misc constants
     RANDOM_ID_LEN = 3
@@ -21,14 +21,14 @@ class Const:
     SCORE_FOR_EACH_TRAITOR = 0
     SCORE_FOR_ALL_TRAITORS = 100
 
-    INSTANCES_STRENGTH = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    INSTANCES_STRENGTH = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     INSTANCES_PER_PLAYER = len(INSTANCES_STRENGTH)
-    DIFFICULTY_A = 70           # actual difficulty is A*n + B where n is the number of remaining players
-    DIFFICULTY_B = -30
+    DIFFICULTY_A = 7           # actual difficulty is A*n + B where n is the number of remaining players
+    DIFFICULTY_B = -3
 
-    AI_TUNE = [ [-300, 300, 25],
-                [-300, 300, 35],
-                [-300, 300, 45],
-                [-300, 300, 55],
-                [-300, 300, 65],
+    AI_TUNE = [ [-30, 30, 2],
+                [-30, 30, 3],
+                [-30, 30, 4],
+                [-30, 30, 5],
+                [-30, 30, 6],
             ]
