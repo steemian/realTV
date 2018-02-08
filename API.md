@@ -33,7 +33,7 @@ difficulty = 7*n - 3 		# where n is the number of players on the island
 Points are awarded:
 * 3 points to each player who participate in beating a challenge
 * 100 points for the last man standing on an island
-* no point awarded if an island ends on an unresolved tie (and all remaining players are eliminated)
+* No point awarded if all survivors betray at once
 * 100 points distributed among all traitors if the team fails the challenge
 
 Bots will spawn with strength randomly selected from allowed values (0 to 10), and vote for elimination of the weakest player 80% of the time, for the strongest 20% of the time (including itself). As usual, bots are recreated anew for each phase
