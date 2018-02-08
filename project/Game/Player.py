@@ -11,6 +11,8 @@ class Player:
         self._name = name
         self.score = Const.STARTING_SCORE
         self.strength = strength
+        self.decision = None
+        self.tieDecision = None
 
 
     def longDescribe(self):
@@ -29,13 +31,47 @@ class Player:
     def voteForTie(self, context):           # override this
         raise NotImplementedError("Player is abstract")
 
-    def decide(self, context):
-        self.decision = self.voteForElimination(context)
 
-        if (self.decision.id not in pc.id for pc in context.activePlayers):
-            print ("decision {} -> {}".format(self.decision, self))
-            self.decision = self
 
+    def decisionCheck(self, allowedValues, decisionAsPlayerDescriptor, defaultValue):
+
+        try:
+            for pc in allowedValues.values():
+                if (decisionAsPlayerDescriptor.id == pc.id):
+                    return pc
+            print ("Decision from {} not found in {}. Falling back to {}".format(
+                self.shortDescribe(),
+                ' '.join(pc.shortDescribe() for pc in allowedValues.values()),
+                defaultValue
+                ))
+            return defaultValue
+        except Exception as ex:
+            print ("Exception from {} lookup in {}. Falling back to {}\n{}".format(
+                self.shortDescribe(),
+                ' '.join(pc.shortDescribe() for pc in allowedValues.values()),
+                defaultValue,
+                ex
+                ))
+            return defaultValue
+
+        print ("Fallback while {} lookup in {}. Falling back to {}".format(
+                self.shortDescribe(),
+                ' '.join(pc.shortDescribe() for pc in allowedValues.values()),
+                defaultValue
+                ))
+        return defaultValue
+
+
+
+    def decideVote(self, context):
+        originalDecision = self.voteForElimination(context)
+        self.decision = self.decisionCheck(context.activePlayers, originalDecision, self)
+        print ("{} votes  {} corrected is {}".format(self.shortDescribe(), originalDecision.shortDescribe(), self.decision.shortDescribe()))
         return self.decision
 
-    
+
+    def decideTie(self, context):
+        originalDecision = self.voteForTie(context)
+        self.tiedDecision = self.decisionCheck(context.currentTies, originalDecision, None)
+        print ("{} breaks {} corrected is {}".format(self.shortDescribe(), originalDecision.shortDescribe(), self.decision.shortDescribe()))
+        return self.tiedDecision
