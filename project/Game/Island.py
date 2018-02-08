@@ -35,7 +35,7 @@ class Island:
             print(self.roundHeader())
 
             for p in self.activePlayers.values():
-                p.decide(self.context)
+                p.decideVote(self.context)
 
             self.registerBetrayers(list(filter(lambda p: p.decision.id == p.id , self.activePlayers.values())))
 
@@ -75,9 +75,13 @@ class Island:
             return False
 
 
-    def eliminate(self, playerId):
+    def eliminate(self, player):
 
-        p = self.allPlayers[playerId]
+        if (not isinstance(player, (Player, PlayerContext))):
+            raise Exception("Expecting Player or context, got {}: {}".format(type(player), player))
+
+
+        p = self.allPlayers[player.id]
         print ("   ELIMINATE {}".format(p.longDescribe()))
 
         if p in self.activePlayers.values():
@@ -143,7 +147,7 @@ class Island:
 
         ties = self.getTies(elimination)
         if (len(ties) == 1):
-            self.eliminate(ties[0].id)
+            self.eliminate(ties[0])
         else:
             self.tieBreak(ties)
 
@@ -175,26 +179,24 @@ class Island:
         print ("-- TIE BREAK ({})".format(
             " ".join(p.id for p in tiedPlayers)))
 
+        elimination = Counter()
         self.context.registerTies(tiedPlayers)
 
-        elimination = Counter()
-
         for p in self.activePlayers.values():
-            decision = p.voteForTie(self.context)
+            decision = p.decideTie(self.context)
             print ("    TIE : {} votes {}".format(p.longDescribe(), decision.longDescribe()))
             if (decision.id in list(pc.id for pc in tiedPlayers)):
                 elimination[decision] += 1
             else:
-                print (" !! Invalid tie vote {} for {} - VOTE SELF".format(
+                print (" !! Invalid tie vote {} for {} - VOTE None".format(
                     p.longDescribe(),
                     decision.longDescribe()
                     ))
-                elimination[p] += 1
-
 
         tiedAgain =  self.getTies(elimination)
-        for bye in tiedAgain:
-            self.eliminate(bye.id)
+        self.eliminate(min(tiedAgain, key=lambda p:p.strength))
+#        for bye in tiedAgain:
+#            self.eliminate(bye.id)
 
 
     def scoreBoard(self):

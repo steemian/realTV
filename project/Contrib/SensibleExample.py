@@ -19,14 +19,20 @@ class SensibleExample (Player):
         estStr = sum(p.strength for p in context.activePlayers.values() if p.strength > self.THRESHOLD_DROP)
 
         if (self.strength < self.THRESHOLD_DROP and difficulty > self.strength*len(context.activePlayers)):
+#            print ("SensibleExample finds itself too week -> suicide ({})".format(self.shortDescribe()))
             return self
 
         if (estStr > difficulty + self.THRESHOLD_MAX):
-            return self.Max(context.activePlayers.values())
+            choice = self.Max(context.activePlayers.values())
+#            print ("SensibleExample kills max -> ({})".format(choice.shortDescribe()))
+            return choice
 
         if (estStr > difficulty + self.THRESHOLD_MIN):
-            return self.Min(context.activePlayers.values())
+            choice = self.Min(context.activePlayers.values())
+#            print ("SensibleExample kills min -> ({})".format(choice.shortDescribe()))
+            return choice
 
+#        print ("SensibleExample fallsback suicide ({})".format(self.shortDescribe()))
         return self
 
     def voteForTie(self, context):
