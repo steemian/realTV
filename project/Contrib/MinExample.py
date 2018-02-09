@@ -11,9 +11,7 @@ class MinExample (Player):
         return ""
 
     def voteForElimination(self, context):
-    	elim = min(context.activePlayers.values(), key=lambda p: p.strength)
-    	print ("{} votes {} among \n{}".format(self.shortDescribe(), elim.longDescribe(), context.describe()))
-    	return elim
+    	return min(context.activePlayers.values(), key=lambda p: p.strength)
 
     def voteForTie(self, context):
         return min(context.currentTies.values(), key=lambda p: p.strength)
