@@ -32,11 +32,11 @@ difficulty = 7*n - 3 		# where n is the number of players on the island
 
 Points are awarded:
 * 3 points to each player who participate in beating a challenge
-* 100 points for the last man standing on an island
-* No point awarded if all survivors betray at once
+* 100 points for the last man standing on an island (plus up to 36 points awarded for beating the challenges)
+* No extra point awarded if all survivors betray at once
 * 100 points distributed among all traitors if the team fails the challenge
 
-Bots will spawn with strength randomly selected from allowed values (0 to 10), and vote for elimination of the weakest player 80% of the time, for the strongest 20% of the time (including itself). As usual, bots are recreated anew for each phase
+Bots will spawn with strength randomly selected from allowed values (0 to 10). They vote for elimination of the weakest player 80% of the time, for the strongest 20% of the time (including itself). As usual, bots are recreated anew for each phase.
 
 Here are the constants:
 
@@ -64,56 +64,85 @@ Here are the constants:
 ![Island](https://s10.postimg.org/7ro6a6teh/quay-500.jpg)
 </center>
 
+### Implement this
+
+```
+class Player:
+    
+    def getSteemUser(self):                              # override this to return your steem name
+        return "@gbd"
+
+    def voteForElimination(self, context):               # override this
+        # return either a Player or a PlayerContext
+        # invalid entries and voting for self will be interpreted betraying
+
+    def voteForTie(self, context):                       # override this
+        # return either a Player or a PlayerContext
+        # It is too late for betrayal, invalid entries will be ignored
+```
+
+And here's the context object you'll get
+
+```
+class PlayerContext:
+    # self.id               a unique string identifier for this instance
+    # self.name             classname this player is implementing
+    # self.previousMoves    [(PlayerContext, PlayerContext)] list of votes cast by this instance: (firstVote, TieBreak)
+    # self.strength         strength of that instance
+    # self.score            score of that instance (updated at the beginning of day)
+
+class GameContext:
+    # self.totalBots        total number of bots in the whole arena
+    # self.totalHumans      total number of non-bot instances in the whole arena
+    # self.phaseIndex       index of the phase (ie. number of islands you've been in before this one)
+
+class Context:
+    # self.islandIndex          probably not useful for you
+    # self.game                 GameContext object
+    # self.activePlayers        {id: PlayerContext}, players still on the island at the beginning of the day
+    # self.betrayers            {id: PlayerContext}, those who will share the bounty if you lose
+    # self.eliminatedPlayers    {id: PlayerContext}, those who lost
+    # self.currentTies          {id: PlayerContext}, only available in case of a tie
+```
 
 
+And here's your first opponent
 
 
-Well, your AIs will land on an artificial island, it's better than nothing. A certain amount of AIs (I'll tell you exactly how many in a while) will spawn on islands, together with stupid bots to fill the gaps.
+```
+from Game.Const import Const
+from Game.Player import Player
+        
+class LikesThemStrong (Player):     # Always votes for the weakest (including itself)
+    
+    def getSteemUser(self):
+        return ""
 
-Every day, all islanders will have to cooperate to solve a challenge together. Of course this challenge will get a little harder every day. Then islanders will vote to eliminate one of them. And days pass until either they fail the trial (and everybody lose) or the last man beats the last trial alone. (and this one wins).
+    def voteForElimination(self, context):
+        return min(context.activePlayers.values(), key=lambda p: p.strength)
 
-You score points for every day you survive, a lot of points if you win, and some points if you decide to leave the island before the others fail the challenge.
-
-
-### The trick ...
-
-And there is a trick of course. Not all AIs are created equal for the challenge. Each participant (`Player`) in the contest will have several instances, with various strength scores, and instances will be randomly dispatched through islands. You'll have to chose between eliminating the weakest islander to get better chances, get rid of the strong ones that could beat you at the end, or just betraying the team to bet on their failure
+    def voteForTie(self, context):
+        return min(context.currentTies.values(), key=lambda p: p.strength)
+```
 
 
-See how vague the descriptions are for every number? I need to fine-tune the numbers to keep some balance, so I'm going to publish those in a few days. With precise rules and python interfaces. So right now you should just get prepared and think of your strategy. Just have a look at the [code on github](https://github.com/steemian/realTV)
+### And here you go!
+You have until friday february 23 to submit AI scripts to the contest. Up to 5 AIs and one prize per account. You have two ways to submit an AI script, in order of preference:
 
+* Directly file a pull request on the [project github](https://github.com/steemian/realTV)
+* Post a comment with a link to the code hosted on a [gist](https://gist.github.com/) or somewhere else online
 
-
-## And the other contests?
-
-*(read more on [AI Contest introductory post](https://steemit.com/aicontest/@gbd/the-ai-contest-coming-soon))*
-
-The previous [Public Goods contest](https://steemit.com/aicontest/@gbd/the-ai-contest-1-public-goods-problem) is closed since yesterday. Results (and payouts) will be published soon. Thanks to all participants : @amosbastian, @grungealpha, @laxam, miripiri and @scorpil
-
-### What if I'm not a programmer
-
-Again, this is not a problem. Post your idea, I will implement it and watch it compete. Or learn Python, it's not that difficult! 
-
-### The rewards
-
-As usual, 90% of the prize pool will be redistributed, but there will be two slight changes for the payouts. Participants will be ranked based on the *total* score of their best-performing AI. Prize pool will be the sum of all payouts for posts and comments with the tag [AiConstest](https://steemit.com/created/aicontest) that have seen payout during the challenge (including fr the previous session). The rest of payouts will go to the next contest to be held.
-
-* 1st participant: 30% of total rewards
-* 2nd participant: 25%
-* 3rd participant: 20%
-* 4th participant: 15%
-* 10% are kept for myself
-
-Upvote to add money to the pool.
+And don't forget to leave a reply with a link and a short explanation of how your AI works
 
 
 
 ### Read my previous posts
 
 
-* The post [introducing the contest](https://steemit.com/aicontest/@gbd/the-ai-contest-1-public-goods-problem) (or  ![french](https://steemitimages.com/0x0/https://s9.postimg.org/3mpd3j2sf/flag-fr-qc_14x21.png) *[french translation](https://steemit.com/aicontest/@gbd/fr-the-ai-contest-1-le-dilemme-du-bien-commun)*)
-* The post [rules post](https://steemit.com/aicontest/@gbd/the-ai-contest-coming-soon) (or  ![french](https://steemitimages.com/0x0/https://s9.postimg.org/3mpd3j2sf/flag-fr-qc_14x21.png) *[french translation](https://steemit.com/aicontest/@gbd/the-ai-contest-bientot-sur-steem)*)
-* [Welcome message for non-programmers](https://steemit.com/aicontest/@gbd/the-ai-contest-1-non-programmers-welcome)
+* The post [introducing the contest](https://steemit.com/aicontest/@gbd/the-ai-contest-2-real-tv) (or  ![french](https://steemitimages.com/0x0/https://s9.postimg.org/3mpd3j2sf/flag-fr-qc_14x21.png) *[french translation](https://steemit.com/aicontest/@gbd/fr-the-ai-contest-2-tele-realite)*)
+* The [rules post](https://steemit.com/aicontest/@gbd/the-ai-contest-coming-soon) (or  ![french](https://steemitimages.com/0x0/https://s9.postimg.org/3mpd3j2sf/flag-fr-qc_14x21.png) *[french translation](https://steemit.com/aicontest/@gbd/the-ai-contest-bientot-sur-steem)*)
+* The [payout for previous contest](https://steemit.com/aicontest/@gbd/the-ai-contest-1-results-are-out)
+
 
 *(many thanks to the authors I link to, including anonymous Wikipedians)*
 *Source of images: [Pixabay](https://www.pexels.com/u/pixabay/), Creative Commons CC0
