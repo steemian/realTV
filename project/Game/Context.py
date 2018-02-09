@@ -47,8 +47,8 @@ class Context:
     def __init__(self, island, gameContext):
         self.islandIndex = island.islandIndex
         self.game = gameContext
-        self.history = []
         self.update(island, None)
+
 
 
     def update(self, island, lastTurnHistory):
@@ -59,7 +59,7 @@ class Context:
         self.activePlayers = {}
         self.betrayers = {}
         self.eliminatedPlayers = {}
-        self.currentTies = []
+        self.currentTies = {}
         if (lastTurnHistory != None):
             self.history.append(lastTurnHistory) 
 
@@ -70,8 +70,8 @@ class Context:
         for p in island.eliminatedPlayers.values():
             self.eliminatedPlayers[p.id] = PlayerContext(p)    
 
-        pad = " " #"\n                         "
-        padTitle = "\n                      "
+#        pad = " " #"\n                         "
+#        padTitle = "\n                      "
 #        print ("   CONTEXT UPD (I={:2})- ACTIVE ({:2}) {}{} BETRAY ({:2}) {}{} ELIM   ({:2}) {}".format(
 #            self.islandIndex,
 #            len(self.activePlayers),
@@ -94,16 +94,16 @@ class Context:
 
     def describe(self):
 
-        description = "CONTEXT ({}/{}/{})\n  ACTIVE ({})\n    {}\n  ELIMINATED ({})\n    {}\n  BETRAYERS ({})\n    {}".format(
+        description = "CONTEXT (A{}/T{}/E{})\n  ACTIVE ({})      {}\n  ELIMINATED ({})   {}\n  TRAITORS ({})     {}".format(
             len(self.activePlayers),
             len(self.betrayers),
             len(self.eliminatedPlayers),
             len(self.activePlayers), 
-            "\n    ".join(p.describe() for p in self.activePlayers.values()),
+            " ".join(p.id[:4] for p in self.activePlayers.values()),
             len(self.eliminatedPlayers), 
-            "\n    ".join(p.describe() for p in self.eliminatedPlayers.values()),
+            " ".join(p.id[:4] for p in self.eliminatedPlayers.values()),
             len(self.betrayers), 
-            "\n    ".join(p.describe() for p in self.betrayers.values()))
+            " ".join(p.id[:4] for p in self.betrayers.values()))
 
         return description
 

@@ -15,6 +15,10 @@ class SensibleExample (Player):
         return ""
 
     def voteForElimination(self, context):
+
+        #print ("{} gets context \n{}".format(self.longDescribe(), context.describe()))
+
+
         difficulty = Const.DIFFICULTY_A * len(context.activePlayers) + Const.DIFFICULTY_B
         estStr = sum(p.strength for p in context.activePlayers.values() if p.strength > self.THRESHOLD_DROP)
 
