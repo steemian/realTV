@@ -6,14 +6,13 @@ All you need to know about the problem is described on [the contest page](https:
 
 <center>
 ![AiContest](https://s19.postimg.org/mz2ksxjub/Ai_Contest-steem.jpg)
-![French](https://s9.postimg.org/3mpd3j2sf/flag-fr-qc_14x21.png) *(read the [french translation](https://steemit.com/aicontest/@gbd/))*
 </center>
 
 
 
 ### The rules
 
-Available `Player` AI scripts will be instantiated a total of 11 times, with different strength scores, ranging from 0 to 10. Strength is used for common challenge. Then, for each phase, instances are randomly dispatched into islands of 12 instances, adding only the minimal amount of bots. A total of 100 phases are run, which means that each player will visite one hundred different tropical islands. Lucky AIs!
+Available `Player` AI scripts will be instantiated a total of 11 times, with different strength scores, ranging from 0 to 10. Then, for each phase, `Player` instances are randomly dispatched into islands of 12 instances, adding only the minimal amount of bots to fill the missing slots. A total of 100 phases are run, which means that each `Player` will visit one hundred different tropical islands. Lucky AIs!
 
 On each island, every day:
 * First, players vote for elimination
@@ -23,7 +22,8 @@ On each island, every day:
 * Next day starts unless there is only one player left (that player wins) or no player at all (no winner and no points awarded)
 
 ```
-difficulty = 7*n - 3 		# where n is the number of players on the island
+difficulty = 7*n - 3        
+   # where n is the number of non-traitor players currently on the island
 ```
 
 <center>
@@ -52,7 +52,7 @@ Here are the constants:
     INSTANCES_STRENGTH = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     INSTANCES_PER_PLAYER = len(INSTANCES_STRENGTH)
     
-    DIFFICULTY_A = 7           # actual difficulty is A*n + B where n is the number of remaining players
+    DIFFICULTY_A = 7           # round difficulty is A*n + B
     DIFFICULTY_B = -3
 
 ```
@@ -69,7 +69,7 @@ Here are the constants:
 ```
 class Player:
     
-    def getSteemUser(self):                              # override this to return your steem name
+    def getSteemUser(self):                              # return your steem name
         return "@gbd"
 
     def voteForElimination(self, context):               # override this
@@ -81,26 +81,31 @@ class Player:
         # It is too late for betrayal, invalid entries will be ignored
 ```
 
-And here's the context object you'll get
+
+And here's the `Context` object you'll get as argument
 
 ```
 class PlayerContext:
     # self.id               a unique string identifier for this instance
     # self.name             classname this player is implementing
-    # self.previousMoves    [(PlayerContext, PlayerContext)] list of votes cast by this instance: (firstVote, TieBreak)
+    # self.previousMoves    [(PlayerContext, PlayerContext)] 
+    #                          votes cast by this instance: (firstVote, TieBreak)
     # self.strength         strength of that instance
     # self.score            score of that instance (updated at the beginning of day)
 
 class GameContext:
     # self.totalBots        total number of bots in the whole arena
     # self.totalHumans      total number of non-bot instances in the whole arena
-    # self.phaseIndex       index of the phase (ie. number of islands you've been in before this one)
+    # self.phaseIndex       index of the phase 
+    #                          (ie. number of islands you've been in before this one)
 
 class Context:
     # self.islandIndex          probably not useful for you
     # self.game                 GameContext object
-    # self.activePlayers        {id: PlayerContext}, players still on the island at the beginning of the day
-    # self.betrayers            {id: PlayerContext}, those who will share the bounty if you lose
+    # self.activePlayers        {id: PlayerContext}, players still on the island 
+    #                               at the beginning of the day
+    # self.betrayers            {id: PlayerContext}, those who will share the 
+    #                               bounty if you lose
     # self.eliminatedPlayers    {id: PlayerContext}, those who lost
     # self.currentTies          {id: PlayerContext}, only available in case of a tie
 ```
@@ -143,6 +148,8 @@ And don't forget to leave a reply with a link and a short explanation of how you
 * The [rules post](https://steemit.com/aicontest/@gbd/the-ai-contest-coming-soon) (or  ![french](https://steemitimages.com/0x0/https://s9.postimg.org/3mpd3j2sf/flag-fr-qc_14x21.png) *[french translation](https://steemit.com/aicontest/@gbd/the-ai-contest-bientot-sur-steem)*)
 * The [payout for previous contest](https://steemit.com/aicontest/@gbd/the-ai-contest-1-results-are-out)
 
+
+Vote the [Ai Contest](https://steemit.com/created/aicontest) posts to add money to the prize pool !
 
 *(many thanks to the authors I link to, including anonymous Wikipedians)*
 *Source of images: [Pixabay](https://www.pexels.com/u/pixabay/), Creative Commons CC0
