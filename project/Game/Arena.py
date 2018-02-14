@@ -35,6 +35,7 @@ class Arena:
         SensibleExample4,
         Clueless,
         ImNotPlayingWithYouGuys,
+        Follower,
 
     ]
 
