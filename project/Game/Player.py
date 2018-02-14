@@ -8,7 +8,7 @@ class Player:
     def __init__(self, name, strength):
         self.id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=Const.RANDOM_ID_LEN))
         #self.name = "[{:10} {:2} ({:15})]".format(name, self.id, type(self).__name__)
-        self._name = name
+        self.name = type(self).__name__
         self.score = Const.STARTING_SCORE
         self.strength = strength
         self.decision = None
@@ -16,7 +16,7 @@ class Player:
 
 
     def longDescribe(self):
-        return "[{:10} {} ({:15}) S={}  [{:5.0f} pts]]".format(self._name, self.id, type(self).__name__, self.strength, self.score)
+        return "[{:10} {} ({:15}) S={}  [{:5.0f} pts]]".format(self.name, self.id, type(self).__name__, self.strength, self.score)
 
     def shortDescribe(self):
         return "{:<3}-{:2}_{:<3}".format(self.id, self.strength, type(self).__name__)
