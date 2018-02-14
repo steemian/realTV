@@ -32,7 +32,7 @@ class Island:
 
         while (len(self.activePlayers) > 0):
 
-            print(self.roundHeader())
+            #print(self.roundHeader())
 
             for p in self.activePlayers.values():
                 p.decideVote(self.context)
@@ -91,7 +91,7 @@ class Island:
 
     def registerBetrayers(self, players):
         for p in players: 
-            print ("  {} **betrays**".format(p.longDescribe()))
+            # print ("  {} **betrays**".format(p.longDescribe()))
             self.betrayers[p.id] = p
             del self.activePlayers[p.id]
 
@@ -122,9 +122,9 @@ class Island:
 
     def noWinner(self):
         self.stats.NOWINNERS += 1
-        print ("  Isl {}.{} : NO WINNER".format(
-            self.context.game.phaseIndex,
-            self.islandIndex,))
+        # print ("  Isl {}.{} : NO WINNER".format(
+        #    self.context.game.phaseIndex,
+        #    self.islandIndex,))
 
 
     def voteAndEliminate(self, players):

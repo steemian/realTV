@@ -1,3 +1,6 @@
+from __future__ import print_function
+import sys
+
 from random import shuffle 
 from math import ceil, floor
 from collections import Counter
@@ -9,6 +12,12 @@ import Game.Const
 from Game.Context import Context, GameContext 
 from Game.Island import Island
 from Game.IslandStats import IslandStats
+
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+    sys.stderr.flush()
+
 
 
 class Arena:
@@ -39,6 +48,7 @@ class Arena:
         self.stats = IslandStats()
         for str in Const.INSTANCES_STRENGTH:
             for p in self.availablePlayers:
+                #print("Creating Player {}".format(p))
                 self.humans.append(p("STR={}".format(str), str))
 
 
@@ -48,7 +58,7 @@ class Arena:
         nbIslands = ceil(totalHumans / Const.MAX_HUMANS_PER_ISLAND)
         totalBots = (nbIslands*Const.PLAYERS_PER_ISLAND) - totalHumans
 
-        print("Making islands.. Humans={} nbIslands={} totalBots={}".format(totalHumans, nbIslands, totalBots))
+        #print("Making islands.. Humans={} nbIslands={} totalBots={}".format(totalHumans, nbIslands, totalBots))
 
         shuffle(self.humans)
         self.islands = []
@@ -78,17 +88,18 @@ class Arena:
         for phaseIndex in range(0, Const.PHASES_PER_GAME):
             self.runPhase(phaseIndex)
         #self.displayResults()
+        eprint (".", end="")
 
 
 
     def runPhase(self, phaseIndex):
-        print ("\n--PHASE {}".format(phaseIndex))
+        #print ("\n--PHASE {}".format(phaseIndex))
         self.makeIslands(phaseIndex)
         for isl in self.islands:
             isl.playUntilLastMan()
             self.stats.add(isl.stats)
 
-        self.displayResults()
+        #self.displayResults()
 
 
     def mkBot():
@@ -107,15 +118,15 @@ class Arena:
                 len(self.humans), (len(self.islands)*Const.PLAYERS_PER_ISLAND) - len(self.humans) ,len(self.islands),  
                 len(self.humans)/len(self.islands)))
         print ("")
-        print ("-----------------------")
-        print ("-- ALL INSTANCES")
-        print ("-----------------------")
-
-        self.humans.sort(reverse=True, key=lambda p:p.score )
-        index = 1
-        for p in self.humans:
-            print ("{:3} - {:3}   {}".format(index, p.score, p.longDescribe()))
-            index += 1
+#        print ("-----------------------")
+#        print ("-- ALL INSTANCES")
+#        print ("-----------------------")#
+#
+#        self.humans.sort(reverse=True, key=lambda p:p.score )
+#        index = 1
+#        for p in self.humans:
+#            print ("{:3} - {:3}   {}".format(index, p.score, p.longDescribe()))
+#            index += 1
 
         print ("")
         print ("-----------------------")

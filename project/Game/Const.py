@@ -10,7 +10,7 @@ class Const:
 # Game constants
     PHASES_PER_GAME = 100
     STARTING_SCORE = 0
-    NB_RUNS_FOR_STATS = 1
+    NB_RUNS_FOR_STATS = 10
 
 # Misc constants
     RANDOM_ID_LEN = 10

@@ -36,15 +36,20 @@ class Player:
     def decisionCheck(self, allowedValues, decisionAsPlayerDescriptor, defaultValue):
 
         try:
-            for pc in allowedValues.values():
-                if (decisionAsPlayerDescriptor.id == pc.id):
-                    return pc
-#            print ("Decision from {} not found in {}. Falling back to {}".format(
-#                self.shortDescribe(),
-#                ' '.join(pc.shortDescribe() for pc in allowedValues.values()),
-#                defaultValue
-#                ))
-            return defaultValue
+            if (decisionAsPlayerDescriptor == None):
+                return defaultValue
+
+            if (decisionAsPlayerDescriptor.id in allowedValues.values()):
+                print (allowedValues)
+                print ("\n\n\n")
+                playerTOBeVoted = allowedValues[decisionAsPlayerDescriptor.id]
+                return playerTOBeVoted
+            else:
+                playerTOBeVoted = defaultValue
+                return playerTOBeVoted
+
+            
+
         except Exception as ex:
             print ("Exception from {} lookup in {}. Falling back to {}\n{}".format(
                 self.shortDescribe(),
