@@ -36,11 +36,15 @@ class Player:
     def decisionCheck(self, allowedValues, decisionAsPlayerDescriptor, defaultValue):
 
         try:
+            #print ("decision as player desc = {}".format(decisionAsPlayerDescriptor))
+
             if (decisionAsPlayerDescriptor == None):
                 return defaultValue
 
             if (decisionAsPlayerDescriptor.id in allowedValues.values()):
+                eprint (allowedValues)
                 print (allowedValues)
+                eprint ("\n\n\n")
                 print ("\n\n\n")
                 playerTOBeVoted = allowedValues[decisionAsPlayerDescriptor.id]
                 return playerTOBeVoted
@@ -70,6 +74,9 @@ class Player:
 
     def decideVote(self, context):
         originalDecision = self.voteForElimination(context)
+        if (originalDecision in (None, self)):
+            print("{} tries to vote {}".format(self.shortDescribe(), originalDecision))
+            
         self.decision = self.decisionCheck(context.activePlayers, originalDecision, self)
 #        print ("{} votes  {} corrected is {}".format(self.shortDescribe(), originalDecision.shortDescribe(), self.decision.shortDescribe()))
         return self.decision
