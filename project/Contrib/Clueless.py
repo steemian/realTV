@@ -8,7 +8,10 @@ class Clueless(Player):     # Always votes randomly
         return "@laxam"
 
     def voteForElimination(self, context):
-        return random.choice(context.activePlayers.values())
+        print (context.activePlayers.values())
+        return random.choice(list(context.activePlayers.values()))
+
 
     def voteForTie(self, context):
-        return random.choice(context.currentTies.values())
+
+        return random.choice(list(context.currentTies.values()))
