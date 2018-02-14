@@ -25,6 +25,7 @@ class Arena:
         SensibleExample4,
         Clueless,
         ImNotPlayingWithYouGuys,
+        LearnerBot,
     ]
 
     availableBots = [
