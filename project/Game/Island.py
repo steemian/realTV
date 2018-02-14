@@ -82,7 +82,7 @@ class Island:
 
 
         p = self.allPlayers[player.id]
-        print ("   ELIMINATE {}".format(p.longDescribe()))
+#        print ("   ELIMINATE {}".format(p.longDescribe()))
 
         if p in self.activePlayers.values():
             del self.activePlayers[p.id]
@@ -102,10 +102,10 @@ class Island:
         victor.score += Const.SCORE_FOR_LASTMAN
         self.stats.PointsForVic += Const.SCORE_FOR_LASTMAN
         self.stats.VICTORIES += 1
-        print ("  Isl {}.{} : VICTORY for {}".format(
-            self.context.game.phaseIndex,
-            self.islandIndex,
-            victor.longDescribe()))
+#        print ("  Isl {}.{} : VICTORY for {}".format(
+#            self.context.game.phaseIndex,
+#            self.islandIndex,
+#            victor.longDescribe()))
 
     def gameOver(self):
         for p in self.betrayers.values():
@@ -115,10 +115,10 @@ class Island:
             self.stats.PointsForGO += Const.SCORE_FOR_ALL_TRAITORS / len(self.betrayers)
 
         self.stats.GAMEOVERS.append(len(self.betrayers))    
-        print ("  Isl {}.{} : GAME OVER for {}".format(
-            self.context.game.phaseIndex,
-            self.islandIndex,
-            " ".join(p.id for p in self.activePlayers.values())))
+#        print ("  Isl {}.{} : GAME OVER for {}".format(
+#            self.context.game.phaseIndex,
+#            self.islandIndex,
+#            " ".join(p.id for p in self.activePlayers.values())))
 
     def noWinner(self):
         self.stats.NOWINNERS += 1
@@ -142,7 +142,7 @@ class Island:
 #                "{:40} : {}".format(p.longDescribe(), score) for p,score in elimination.items())))
 
         if (len(elimination) == 0):
-            print ("   NO VOTES FOR holders - no elimination")
+#            print ("   NO VOTES FOR holders - no elimination")
             return
 
         ties = self.getTies(elimination)
@@ -176,15 +176,15 @@ class Island:
 
     def tieBreak(self, tiedPlayers):
 
-        print ("-- TIE BREAK ({})".format(
-            " ".join(p.id for p in tiedPlayers)))
+#        print ("-- TIE BREAK ({})".format(
+#            " ".join(p.id for p in tiedPlayers)))
 
         elimination = Counter()
         self.context.registerTies(tiedPlayers)
 
         for p in self.activePlayers.values():
             decision = p.decideTie(self.context)
-            print ("    TIE : {} votes {}".format(p.longDescribe(), decision.longDescribe()))
+#            print ("    TIE : {} votes {}".format(p.longDescribe(), decision.longDescribe()))
             if (decision.id in list(pc.id for pc in tiedPlayers)):
                 elimination[decision] += 1
             else:

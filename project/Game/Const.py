@@ -26,9 +26,3 @@ class Const:
     DIFFICULTY_A = 7           # actual difficulty is A*n + B where n is the number of remaining players
     DIFFICULTY_B = -3
 
-    AI_TUNE = [ [-30, 30, 2],
-                [-3, 3, 3],
-                [-3, 30, 3],
-                [-30, 3, 3],
-                [-30, 30, 3],
-            ]

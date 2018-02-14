@@ -27,6 +27,7 @@ class Arena:
 #        SuicideExample,
         MinExample,
         MaxExample,
+#        SensibleExample,
         SensibleExample0,
         SensibleExample1,
         SensibleExample2,

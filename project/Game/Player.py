@@ -28,7 +28,7 @@ class Player:
     def voteForElimination(self, context):           # override this
         raise NotImplementedError("Player is abstract")
 
-    def voteForTie(self, context):           # override this
+    def voteForTie(self, context):           # override thiskeys
         raise NotImplementedError("Player is abstract")
 
 
@@ -36,17 +36,19 @@ class Player:
     def decisionCheck(self, allowedValues, decisionAsPlayerDescriptor, defaultValue):
 
         try:
-            print ("Checking {} desc = {}".format(self.shortDescribe(), decisionAsPlayerDescriptor))
+            #print (allowedValues)   
+            #print ("\n\n\n")
+            #print ("Checking {} desc = {}".format(self.shortDescribe(), decisionAsPlayerDescriptor))
 
             if (decisionAsPlayerDescriptor == None):
+                print ("Checking {} decided -None- -> {}".format(self.shortDescribe(), defaultValue)) 
                 return defaultValue
 
-            if (decisionAsPlayerDescriptor.id in allowedValues.values()):
-                print (allowedValues)
-                print ("\n\n\n")
+            if (decisionAsPlayerDescriptor.id in allowedValues.keys()):
                 playerTOBeVoted = allowedValues[decisionAsPlayerDescriptor.id]
                 return playerTOBeVoted
             else:
+                print ("Checking {} decided {} -> {}".format(self.shortDescribe(), decisionAsPlayerDescriptor.shortDescribe(), defaultValue)) 
                 playerTOBeVoted = defaultValue
                 return playerTOBeVoted
 
@@ -71,6 +73,7 @@ class Player:
 
 
     def decideVote(self, context):
+#        print ("CONTEXT {}".format(context.describe()))
         originalDecision = self.voteForElimination(context)
 #        if (originalDecision in (None, self)):
 #            print("{} tries to vote {}".format(self.shortDescribe(), originalDecision))
