@@ -23,6 +23,8 @@ class Arena:
         SensibleExample2,
         SensibleExample3,
         SensibleExample4,
+        Clueless,
+        ImNotPlayingWithYouGuys,
     ]
 
     availableBots = [
