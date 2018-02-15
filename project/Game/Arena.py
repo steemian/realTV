@@ -1,3 +1,6 @@
+from __future__ import print_function
+import sys
+
 from random import shuffle 
 from math import ceil, floor
 from collections import Counter
@@ -25,6 +28,8 @@ class Arena:
         SensibleExample4,
         Clueless,
         ImNotPlayingWithYouGuys,
+        Follower,
+
     ]
 
     availableBots = [
