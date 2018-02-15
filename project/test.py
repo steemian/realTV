@@ -68,7 +68,7 @@ def manyRuns():
             ranks[k].append(curRank)
             curRank += 1
 
-    #eprintscores(totalScores, "Iteration {}".format(i))
+    eprintscores(totalScores, "Iteration {}".format(i))
     eprintRanks(ranks, "Iteration {}".format(i))
     eprintStats(stats, "Iteration {}".format(i))
 

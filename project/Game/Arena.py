@@ -27,11 +27,7 @@ class Arena:
 #        SuicideExample,
         MinExample,
         MaxExample,
-        SensibleExample0,
-        SensibleExample1,
-        SensibleExample2,
-        SensibleExample3,
-        SensibleExample4,
+
         Clueless,
         ImNotPlayingWithYouGuys,
         Follower,

@@ -8,7 +8,7 @@ class Player:
     def __init__(self, name, strength):
         self.id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=Const.RANDOM_ID_LEN))
         #self.name = "[{:10} {:2} ({:15})]".format(name, self.id, type(self).__name__)
-        self._name = name
+        self.name = type(self).__name__
         self.score = Const.STARTING_SCORE
         self.strength = strength
         self.decision = None
@@ -16,7 +16,7 @@ class Player:
 
 
     def longDescribe(self):
-        return "[{:10} {} ({:15}) S={}  [{:5.0f} pts]]".format(self._name, self.id, type(self).__name__, self.strength, self.score)
+        return "[{:10} {} ({:15}) S={}  [{:5.0f} pts]]".format(self.name, self.id, type(self).__name__, self.strength, self.score)
 
     def shortDescribe(self):
         return "{:<3}-{:2}_{:<3}".format(self.id, self.strength, type(self).__name__)
@@ -36,15 +36,19 @@ class Player:
     def decisionCheck(self, allowedValues, decisionAsPlayerDescriptor, defaultValue):
 
         try:
+            #print (allowedValues)   
+            #print ("\n\n\n")
+            #print ("Checking {} desc = {}".format(self.shortDescribe(), decisionAsPlayerDescriptor))
+
             if (decisionAsPlayerDescriptor == None):
+                print ("Checking {} decided -None- -> {}".format(self.shortDescribe(), defaultValue)) 
                 return defaultValue
 
-            if (decisionAsPlayerDescriptor.id in allowedValues.values()):
-                print (allowedValues)
-                print ("\n\n\n")
+            if (decisionAsPlayerDescriptor.id in allowedValues.keys()):
                 playerTOBeVoted = allowedValues[decisionAsPlayerDescriptor.id]
                 return playerTOBeVoted
             else:
+                print ("Checking {} decided invalid {} -> {}".format(self.shortDescribe(), decisionAsPlayerDescriptor.shortDescribe(), defaultValue)) 
                 playerTOBeVoted = defaultValue
                 return playerTOBeVoted
 
@@ -69,7 +73,10 @@ class Player:
 
 
     def decideVote(self, context):
+#        print ("CONTEXT {}".format(context.describe()))
         originalDecision = self.voteForElimination(context)
+#        if (originalDecision in (None, self)):
+#            print("{} tries to vote {}".format(self.shortDescribe(), originalDecision))
         self.decision = self.decisionCheck(context.activePlayers, originalDecision, self)
 #        print ("{} votes  {} corrected is {}".format(self.shortDescribe(), originalDecision.shortDescribe(), self.decision.shortDescribe()))
         return self.decision
