@@ -75,8 +75,11 @@ def manyRuns():
 
 def eprintRanks(ranks, comment):
     eprint("\n RANKS {}".format(comment))
-    for player,rk in ranks.items():
-        eprint("{:30} - {}".format(player, " ".join(str(i) for i in rk )))
+
+    players = [(p,rks) for p,rks in ranks.items()]
+    players = sorted(players, key=lambda tuple:sum(tuple[1]))
+    for player,rk in players:
+        eprint("{:30} (avg rank {:2.1f})-  {}".format(player, sum(rk)/len(rk), " ".join(str(i) for i in rk )))
 
 def eprintStats(stats, comment):
     eprint("\n STATS {}\n{}".format(comment, stats.describe()))
@@ -95,4 +98,5 @@ def eprintscores(scores, comment):
 #smokeTest()
 #instantiateGame()
 manyRuns()
+
 
